@@ -1,0 +1,12 @@
+---
+- hosts: www
+  sudo: true
+  tasks:
+    - name: deploy document publish script
+      action: copy src=../scripts/publish-docs.sh dest=/home/secretary/synhak-publish.sh
+    - name: chmod document publish script
+      action: file path=/home/secretary/synhak-publish.sh mode=0755 state=file owner=secretary
+    - name: deploy github hook handler
+      action: copy src=../scripts/rebuild_docs.php dest=/home/secretary/public_html/rebuild_docs.php
+    - name: publish documents
+      action: command /home/secretary/synhak-publish.sh
