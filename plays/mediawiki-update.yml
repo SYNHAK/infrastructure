@@ -1,0 +1,36 @@
+---
+- hosts: www
+  sudo: True
+  vars:
+    mediawiki_version: "1.19"
+    mw_git: "https://gerrit.wikimedia.org/r/p/mediawiki/extensions"
+    mw_prefix: "/srv/web/w"
+  vars_files:
+    - ../private/mediawiki-settings.yml
+  tasks:
+    - name: Install PHP packages
+      action: yum pkg=$item state=latest
+      with_items:
+        - php
+        - php-pecl-apc
+        - php-mysql
+        - php-xml
+        - librsvg2
+    - name: Update mediawiki
+      action: git repo=https://github.com/SYNHAK/mediawiki.git dest=/srv/web/w/
+    - name: Update ConfirmEdit extension
+      action: git repo=${mw_git}/ConfirmEdit.git dest=${mw_prefix}/extensions/ConfirmEdit
+    - name: Update ParserFunctions extension
+      action: git repo=${mw_git}/ParserFunctions.git dest=${mw_prefix}/extensions/ParserFunctions
+    - name: Update Nuke extension
+      action: git repo=${mw_git}/Nuke.git dest=${mw_prefix}/extensions/Nuke
+    - name: Update Gadgets extension
+      action: git repo=${mw_git}/Gadgets.git dest=${mw_prefix}/extensions/Gadgets
+    - name: Update googleAnalytics extension
+      action: git repo=${mw_git}/googleAnalytics.git dest=${mw_prefix}/extensions/googleAnalytics
+    - name: Update secured_html extension
+      action: copy src=../config/Secured_HTML.php dest=${mw_prefix}/extensions/Secured_HTML.php
+    - name: Update RSS extension
+      action: git repo=${mw_git}/RSS.git dest=${mw_prefix}/extensions/RSS
+    - name: Update mediawiki configuration
+      action: template src=../config/LocalSettings.php dest=${mw_prefix}/LocalSettings.php

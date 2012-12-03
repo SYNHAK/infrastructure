@@ -1,0 +1,21 @@
+---
+- hosts: all
+  sudo: True
+  tasks:
+    - name: enable EPEL
+      action: copy src=../config/epel.repo dest=/etc/yum.repos.d/epel.repo
+    - name: configure hostname
+      action: lineinfile name=/etc/sysconfig/network regexp=^HOSTNAME= line=HOSTNAME=$inventory_hostname insertafter=EOF state=present
+      notify:
+      - set hostname
+      - update motd
+    - name: install $item
+      action: yum pkg=$item state=latest
+      with_items:
+        - git
+        - epel-release
+  handlers:
+    - name: set hostname
+      action: command hostname $inventory_hostname
+    - name: update motd
+      action: template src=../config/motd dest=/etc/motd

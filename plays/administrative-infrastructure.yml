@@ -2,6 +2,8 @@
 - hosts: www
   sudo: true
   tasks:
+    - name: create secretary user
+      action: user name=secretary state=present
     - name: deploy document publish script
       action: copy src=../scripts/publish-docs.sh dest=/home/secretary/synhak-publish.sh
     - name: chmod document publish script

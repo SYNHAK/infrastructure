@@ -1,0 +1,46 @@
+---
+- hosts: www
+  sudo: True
+  vars_files:
+    - '../private/mailman.yml'
+  vars:
+    - lists:
+      - announce
+      - discuss
+      - board
+      - members
+      - sysadmin
+      - mailman
+  tasks:
+    - name: update $item
+      action: yum pkg=$item state=latest
+      with_items:
+        - mailman
+        - postfix
+    - name: install basic aliases
+      action: copy src=../config/aliases dest=/etc/synhak-aliases
+    - name: Configure postfix
+      action: copy src=../config/main.cf dest=/etc/postfix/main.cf
+      notify:
+        - run newaliases
+    - name: Configure mailman
+      action: copy src=../config/mm_cfg.py dest=/usr/lib/mailman/Mailman/mm_cfg.py
+    - name: create lists
+      action: command creates=/var/lib/mailman/lists/${item}/config.pck /usr/lib/mailman/bin/newlist -q ${item} sysadmin@synhak.org ${admin_pw}
+      with_items: $lists
+    - name: store list configuration for $item
+      action: copy src=../config/mailman/${item}.cfg dest=/etc/mailman/${item}.cfg
+      with_items: $lists
+      notify:
+        - configure lists
+    - name: Ensure service $item is enabled and running
+      action: service name=$item state=started
+      with_items:
+        - mailman
+        - postfix
+  handlers:
+    - name: configure lists
+      action: command /usr/lib/mailman/bin/config_list -i /etc/mailman/${item}.cfg ${item}
+      with_items: $lists
+    - name: run newaliases
+      action: command newaliases
