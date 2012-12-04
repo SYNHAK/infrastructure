@@ -27,4 +27,4 @@
     - name: reload wsgi
       action: command touch /srv/spiff/spiff/wsgi.py
     - name: spiff syncdb
-      action: command /srv/spiff/manage.py syncdb --migrate --noinput
+      action: command shell source /srv/virtualenv/bin/activate; /srv/spiff/manage.py syncdb --migrate --noinput
