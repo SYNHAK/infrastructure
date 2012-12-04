@@ -7,10 +7,10 @@
     - name: update phong
       action: git repo=https://github.com/SYNHAK/synhak-documents.git dest=/srv/phong/synhak-documents/
     - name: meetbot crontab
-      action: cron user=phong minute=26 hour=8 job="/srv/phong/synhak-documents/tools/meetings.py -w -r -m"
+      action: cron name="Meetbot" user=phong minute=26 hour=8 job="/srv/phong/synhak-documents/tools/meetings.py -w -r -m"
     - name: financial report wiki cron
-      action: cron user=phong minute=0 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -w /home/treasurer/public_html/synhak.xml.gnucash"
+      action: cron name="Daily fiscal wiki page" user=phong minute=0 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -w /home/treasurer/public_html/synhak.xml.gnucash"
     - name: discuss monthly fiscal report
-      action: cron user=phong minute=30 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -e discuss@synhak.org /home/treasurer/public_html/synhak.xml.gnucash"
+      action: cron name="monthly fiscal report" user=phong minute=30 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -e discuss@synhak.org /home/treasurer/public_html/synhak.xml.gnucash"
     - name: treasurer tuesday fiscal report
-      action: cron user=phong minute=0 hour=12 weekday=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -e treasurer@synhak.org /home/treasurer/public_html/synhak.xml.gnucash"
+      action: cron name="tuesday fiscal report" user=phong minute=0 hour=12 weekday=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -e treasurer@synhak.org /home/treasurer/public_html/synhak.xml.gnucash"
