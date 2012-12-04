@@ -1,0 +1,39 @@
+---
+- hosts: www
+  sudo: True
+  tasks:
+    - name: install $item
+      action: yum pkg=$item state=latest
+      with_items:
+        - MySQL-python
+        - mod_wsgi
+        - httpd
+        - mod_ssl
+    - name: Configure selinux
+      action: seboolean persistent=yes name=httpd_can_network_connect state=true
+      ignore_errors: True
+    - name: Ensure apache is enabled
+      action: service name=httpd state=started
+    - name: Install SSL certificate
+      action: copy src=../private/synhak.org.crt dest=/etc/pki/tls/certs/synhak.org.crt
+      notify:
+        - reload apache
+    - name: Install SSL key
+      action: copy src=../private/synhak.org.key dest=/etc/pki/tls/private/synhak.org.key
+      notify:
+        - reload apache
+    - name: Update apache configuration
+      action: copy src=../config/synhak.org.conf dest=/etc/httpd/conf.d/synhak.org.conf
+      notify:
+        - reload apache
+    - name: Configure SSL certificate
+      action: lineinfile dest=/etc/httpd/conf.d/ssl.conf regexp="^SSLCertificateFile" line="SSLCertificateFile /etc/pki/tls/certs/synhak.org.crt"
+      notify:
+        - reload apache
+    - name: Configure SSL key
+      action: lineinfile dest=/etc/httpd/conf.d/ssl.conf regexp="^SSLCertificateKeyFile" line="SSLCertificateKeyFile /etc/pki/tls/private/synhak.org.key"
+      notify:
+        - reload apache
+  handlers:
+    - name: reload apache
+      action: service name=httpd state=reloaded
