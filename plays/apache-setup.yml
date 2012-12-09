@@ -26,6 +26,10 @@
       action: copy src=../config/synhak.org.conf dest=/etc/httpd/conf.d/synhak.org.conf
       notify:
         - reload apache
+    - name: Un-disable UserDir
+      action: lineinfile dest=/etc/httpd/conf/httpd.conf regexp="UserDir disabled" state=absent
+      notify:
+        - reload apache
     - name: Configure SSL certificate
       action: lineinfile dest=/etc/httpd/conf.d/ssl.conf regexp="^SSLCertificateFile" line="SSLCertificateFile /etc/pki/tls/certs/synhak.org.crt"
       notify:
