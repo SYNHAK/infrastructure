@@ -4,11 +4,21 @@
   tasks:
     - name: create secretary user
       action: user name=secretary state=present
+    - name: create treasurer user
+      action: user name=treasurer state=present
+    - name: add treasuerer public key
+      action: authorized_key user=treasurer key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC74FZKKpmipoXNesIh/tRLmtZs5VKrpEFrD/37vipO8U9XDvve8JhqS37RcxAneO33ldFjaJ3/GZG1rHsoEaM4yzoMvRUOuspqlw35kJt1DnGmVd/Dv8XAqH+Me+Ql8wmc0O4qOxK0PvRzEE8ucRi2qb1Wzez7XKM01lDEFHV8r78gIJh2FKReOYEBxvR1Hoe+aBKXEGJLOdQyb//ZiMIEP1hOPbLW46Kecm5ABz9I86+JwG71AOvZLozfl7GuoNX2Q2EPy/cOBybhhT6yf4aCQhUTu2WFdDvTNkeifZGDHNRboUCRw45NGnbpr6SYMoMzuYUuQspBDRaJ0ThS7zzN treasurer@polyisoprene.synhak.org"
     - name: deploy document publish script
       action: copy src=../scripts/publish-docs.sh dest=/home/secretary/synhak-publish.sh
     - name: chmod document publish script
       action: file path=/home/secretary/synhak-publish.sh mode=0755 state=file owner=secretary
+    - name: configure public_html
+      action: file path=/home/secretary/public_html/ state=directory
     - name: deploy github hook handler
       action: copy src=../scripts/rebuild_docs.php dest=/home/secretary/public_html/rebuild_docs.php
+    - name: install inkscape for image rendering
+      action: yum pkg=inkscape state=latest
+    - name: install pdflatex
+      action: yum pkg=texlive-latex state=latest
     - name: publish documents
       action: command /home/secretary/synhak-publish.sh
