@@ -10,3 +10,7 @@ DATABASES = {
 }
 
 STATIC_URL = '/auth/static'
+
+STRIPE_KEY = '{{stripe_key}}'
+
+LOGIN_REDIRECT_URL = '/auth/'
