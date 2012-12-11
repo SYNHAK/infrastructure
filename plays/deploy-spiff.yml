@@ -17,14 +17,19 @@
       notify:
       - reload wsgi
       - spiff syncdb
+      tags:
+        - quick
     - name: build spiff virtualenv
       action: command pip-python -E /srv/virtualenv/ install -r /srv/spiff/pip-requirements
     - name: install python-mysql to spiff virtualenv
       action: command pip-python -E /srv/virtualenv/ install MySQL-python
     - name: configure spiff
       action: template src=../config/local_settings.py dest=/srv/spiff/spiff/local_settings.py
+      notify:
+      - reload wsgi
+      - spiff syncdb
   handlers:
     - name: reload wsgi
       action: command touch /srv/spiff/spiff/wsgi.py
     - name: spiff syncdb
-      action: command shell source /srv/virtualenv/bin/activate; /srv/spiff/manage.py syncdb --migrate --noinput
+      action: shell source /srv/virtualenv/bin/activate; /srv/spiff/manage.py syncdb --migrate --noinput
