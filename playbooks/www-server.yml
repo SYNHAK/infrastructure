@@ -4,3 +4,4 @@
 - include: ../plays/deploy-spiff.yml
 - include: ../plays/configure-mailman.yml
 - include: ../plays/update-phong.yml
+- include: ../plays/administrative-infrastructure.yml
