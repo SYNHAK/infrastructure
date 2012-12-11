@@ -9,6 +9,7 @@
         - mod_wsgi
         - httpd
         - mod_ssl
+        - awstats
     - name: Configure selinux
       action: seboolean persistent=yes name=httpd_can_network_connect state=true
       ignore_errors: True
@@ -38,6 +39,10 @@
       action: lineinfile dest=/etc/httpd/conf.d/ssl.conf regexp="^SSLCertificateKeyFile" line="SSLCertificateKeyFile /etc/pki/tls/private/synhak.org.key"
       notify:
         - reload apache
+    - name: configure awstats
+      action: template src=../config/awstats.conf dest=/etc/awstats/awstats.${inventory_hostname}.conf
+    - name: install google analytics token
+      action: copy src=../config/google274c79f3d27b61a5.html dest=/var/www/html/google274c79f3d27b61a5.html
   handlers:
     - name: reload apache
       action: service name=httpd state=reloaded
