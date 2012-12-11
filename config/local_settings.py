@@ -9,7 +9,7 @@ DATABASES = {
     }
 }
 
-STATIC_URL = '/auth/static'
+STATIC_URL = '/auth/static/'
 
 STRIPE_KEY = '{{stripe_key}}'
 
