@@ -43,8 +43,8 @@ $wgLogo             = "/logo.png";
 $wgEnableEmail      = true;
 $wgEnableUserEmail  = true; # UPO
 
-$wgEmergencyContact = "wiki@synhak.org";
-$wgPasswordSender   = "wiki@synhak.org";
+$wgEmergencyContact = "sysadmin@synhak.org";
+$wgPasswordSender   = "sysadmin@synhak.org";
 
 $wgEnotifUserTalk      = false; # UPO
 $wgEnotifWatchlist     = false; # UPO
