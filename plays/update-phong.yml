@@ -1,11 +1,20 @@
 ---
 - hosts: all
   sudo: true
+  vars_files:
+    - ../private/phong-config.yml
   tasks:
+    - name: install python deps
+      action: easy_install name=$item
+      with_items: 
+        - wikitools
+        - Cheetah
     - name: create phong user
       action: user name=phong comment="Phong!" state=present home=/srv/phong
     - name: update phong
       action: git repo=https://github.com/SYNHAK/synhak-documents.git dest=/srv/phong/synhak-documents/
+    - name: configure phong
+      action: template src=../config/phong-settings.py dest=/srv/phong/synhak-documents/tools/settings.py
     - name: meetbot crontab
       action: cron name="Meetbot" user=phong minute=26 hour=8 job="/srv/phong/synhak-documents/tools/meetings.py -w -r -m"
     - name: financial report wiki cron
