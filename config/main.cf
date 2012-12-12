@@ -396,7 +396,7 @@ alias_maps = hash:/etc/aliases, hash:/etc/synhak-aliases, hash:/etc/mailman/alia
 #
 #alias_database = dbm:/etc/aliases
 #alias_database = dbm:/etc/mail/aliases
-alias_database = hash:/etc/aliases
+alias_database = hash:/etc/aliases, hash:/etc/synhak-aliases
 #alias_database = hash:/etc/aliases, hash:/opt/majordomo/aliases
 
 # ADDRESS EXTENSIONS (e.g., user+foo)

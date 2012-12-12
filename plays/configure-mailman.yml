@@ -19,10 +19,12 @@
         - postfix
     - name: install basic aliases
       action: copy src=../config/aliases dest=/etc/synhak-aliases
+      notify:
+        - run newaliases
     - name: Configure postfix
       action: copy src=../config/main.cf dest=/etc/postfix/main.cf
       notify:
-        - run newaliases
+        - restart postfix
     - name: Configure mailman
       action: copy src=../config/mm_cfg.py dest=/usr/lib/mailman/Mailman/mm_cfg.py
     - name: create lists
@@ -42,5 +44,7 @@
     - name: configure lists
       action: command /usr/lib/mailman/bin/config_list -i /etc/mailman/${item}.cfg ${item}
       with_items: $lists
+    - name: restart postfix
+      action: service name=postfix state=reloaded
     - name: run newaliases
       action: command newaliases
