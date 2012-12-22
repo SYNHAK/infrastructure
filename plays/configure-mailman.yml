@@ -29,10 +29,11 @@
       action: copy src=../config/mm_cfg.py dest=/usr/lib/mailman/Mailman/mm_cfg.py
     - name: create lists
       action: command creates=/var/lib/mailman/lists/${item}/config.pck /usr/lib/mailman/bin/newlist -q ${item} sysadmin@synhak.org ${admin_pw}
+      register: mm_output
       with_items: $lists
     - name: store list configuration for $item
-      action: copy src=../config/mailman/${item}.cfg dest=/etc/mailman/${item}.cfg
-      with_items: $lists
+      action: copy src=../config/mailman/${item.item}.cfg dest=/etc/mailman/${item.item}.cfg
+      with_items: $nm_output
       notify:
         - configure lists
     - name: Ensure service $item is enabled and running
@@ -42,8 +43,8 @@
         - postfix
   handlers:
     - name: configure lists
-      action: command /usr/lib/mailman/bin/config_list -i /etc/mailman/${item}.cfg ${item}
-      with_items: $lists
+      action: command echo /usr/lib/mailman/bin/config_list -i /etc/mailman/${item.item}.cfg ${item.item}
+      with_items: $nm_output
     - name: restart postfix
       action: service name=postfix state=reloaded
     - name: run newaliases
