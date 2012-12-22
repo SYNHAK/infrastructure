@@ -41,6 +41,9 @@
       with_items:
         - mailman
         - postfix
+    - name: update local list configuration
+      action: fetch src=/etc/mailman/${item}.cfg dest=../config/mailman/${item}.cfg.d
+      with_items: $lists
   handlers:
     - name: configure lists
       action: command echo /usr/lib/mailman/bin/config_list -i /etc/mailman/${item.item}.cfg ${item.item}
