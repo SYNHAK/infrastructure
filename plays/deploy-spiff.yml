@@ -17,6 +17,7 @@
       notify:
       - reload wsgi
       - spiff syncdb
+      - spiff migrate
       tags:
         - quick
     - name: build spiff virtualenv
@@ -28,8 +29,11 @@
       notify:
       - reload wsgi
       - spiff syncdb
+      - spiff migrate
   handlers:
     - name: reload wsgi
       action: command touch /srv/spiff/spiff/wsgi.py
+    - name: spiff migrate
+      action: shell source /srv/virtualenv/bin/activate; /srv/spiff/manage.py migrate
     - name: spiff syncdb
-      action: shell source /srv/virtualenv/bin/activate; /srv/spiff/manage.py syncdb --migrate --noinput
+      action: shell source /srv/virtualenv/bin/activate; /srv/spiff/manage.py syncdb --all --noinput
