@@ -20,6 +20,6 @@
     - name: financial report wiki cron
       action: cron name="Daily fiscal wiki page" user=phong minute=0 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -w /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
     - name: discuss monthly fiscal report
-      action: cron name="monthly fiscal report" user=phong minute=30 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -e discuss@synhak.org /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
+      action: cron name="monthly fiscal report" user=phong day=1 minute=30 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -e discuss@synhak.org /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
     - name: treasurer tuesday fiscal report
       action: cron name="tuesday fiscal report" user=phong minute=0 hour=12 weekday=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -e treasurer@synhak.org /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
