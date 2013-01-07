@@ -30,6 +30,8 @@
       action: git repo=${mw_git}/googleAnalytics.git dest=${mw_prefix}/extensions/googleAnalytics
     - name: Update secured_html extension
       action: copy src=../config/Secured_HTML.php dest=${mw_prefix}/extensions/Secured_HTML.php
+    - name: Update googleagenda extension
+      action: copy src=../config/googleAgenda.php dest=${mw_prefix}/extensions/googleAgenda.php
     - name: Update RSS extension
       action: git repo=${mw_git}/RSS.git dest=${mw_prefix}/extensions/RSS
     - name: Update mediawiki configuration

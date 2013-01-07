@@ -179,6 +179,8 @@ require_once( "$IP/extensions/RSS/RSS.php" );
 
 require_once("$IP/extensions/Nuke/Nuke.php");
 
+require_once( "$IP/extensions/googleAgenda.php" );
+
 // Client side caching: We override this in apache.
 // UPDATE: 2012-10-29 set to true for now, custom httpd cache rules are acting up.
 $wgCachePages = true;
