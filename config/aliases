@@ -6,3 +6,5 @@ phong: sysadmin
 
 devel: discuss@synhak.org
 info: members@synhak.org
+
+proposals: "|/srv/phong/synhak-documents/tools/proposals.py -l members -m -e discuss@synhak.org members@synhak.org"
