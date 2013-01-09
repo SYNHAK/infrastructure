@@ -26,3 +26,5 @@
       action: file dest=/var/www/html/logo.png src=/home/secretary/public_html/docs/images/logo-128.png state=link
     - name: publish documents
       action: command /home/secretary/synhak-publish.sh
+    - name: install webcam-notify script
+      action: copy src=../scripts/webcam-notify.php dest=/var/www/html/webcam-notify.php
