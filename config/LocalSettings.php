@@ -157,6 +157,14 @@ $wgSVGConverter = 'rsvg';
 
 // Captcha
 require_once( "$IP/extensions/ConfirmEdit/ConfirmEdit.php" );
+// Begin not-quite-captcha-but-should-help-destroy-spam section
+require_once( "$IP/extensions/ConfirmEdit/QuestyCaptcha.php" );
+$wgCaptchaClass = 'QuestyCaptcha';
+$wgCaptchaQuestions[] = array(
+  'question' => 'Fill in the blank: SYN/HAK, The __________ Hackerspace. Hint: It is our city.',
+  'answer' => 'Akron');
+// End not-quite-captcha-but-should-help-destroy-spam section
+
 require_once( "$IP/extensions/ConfirmEdit/ReCaptcha.php"); 
 $wgCaptchaClass = 'ReCaptcha';
 $wgReCaptchaPublicKey = '{{wg_captcha_public_key}}';
@@ -180,6 +188,8 @@ require_once( "$IP/extensions/RSS/RSS.php" );
 require_once("$IP/extensions/Nuke/Nuke.php");
 
 require_once( "$IP/extensions/googleAgenda.php" );
+
+include_once( "$IP/extensions/ExternalData/ExternalData.php" );
 
 // Client side caching: We override this in apache.
 // UPDATE: 2012-10-29 set to true for now, custom httpd cache rules are acting up.
