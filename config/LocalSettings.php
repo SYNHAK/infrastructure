@@ -157,6 +157,14 @@ $wgSVGConverter = 'rsvg';
 
 // Captcha
 require_once( "$IP/extensions/ConfirmEdit/ConfirmEdit.php" );
+// Begin not-quite-captcha-but-should-help-destroy-spam section
+require_once( "$IP/extensions/ConfirmEdit/QuestyCaptcha.php");
+$wgCaptchaClass = 'QuestyCaptcha';
+$wgCaptchaQuestions[] = array(
+    'question' => 'Fill in the blank: SYN/HAK, The __________ Hackerspace. Hint: It is our city.',
+    'answer' => 'Akron');
+// End not-quite-captcha-but-should-help-destroy-spam section
+
 require_once( "$IP/extensions/ConfirmEdit/ReCaptcha.php"); 
 $wgCaptchaClass = 'ReCaptcha';
 $wgReCaptchaPublicKey = '{{wg_captcha_public_key}}';
