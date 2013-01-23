@@ -181,6 +181,8 @@ require_once("$IP/extensions/Nuke/Nuke.php");
 
 require_once( "$IP/extensions/googleAgenda.php" );
 
+include_once( "$IP/extensions/ExternalData/ExternalData.php" );
+
 // Client side caching: We override this in apache.
 // UPDATE: 2012-10-29 set to true for now, custom httpd cache rules are acting up.
 $wgCachePages = true;
@@ -188,6 +190,5 @@ $wgCachePages = true;
 $wgAllowMicrodataAttributes = true;
 
 $wgNamespacesWithSubpages = array_fill(0, 200, true);
-
 
 //$wgReadOnly = 'OUTAGE: This wiki is in read-only mode until 5PM EST on August 28th.';
