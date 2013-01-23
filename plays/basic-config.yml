@@ -8,8 +8,13 @@
       - name: phuzion
         key: "$FILE(../sysadmin-keys/phuzion.pub)"
   tasks:
+    - name: Create sysadmin-git user
+      action: user name=sysadmin-git state=present home=/srv/sysadmin-git/
     - name: Create sysadmin users
       action: user name=${item.name} state=present groups="wheel" append=true
+      with_items: $sysadmins
+    - name: install sysadmin-git keys
+      action: authorized_key user=sysadmin-git key="${item.key}"
       with_items: $sysadmins
     - name: install sysadmin keys
       action: authorized_key user=${item.name} key="${item.key}"
