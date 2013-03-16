@@ -139,7 +139,7 @@ $wgResourceLoaderMaxQueryLength = -1;
 
 require_once( "$IP/extensions/googleAnalytics/googleAnalytics.php" );
 # Replace xxxxxxx-x with YOUR GoogleAnalytics UA number
-$wgGoogleAnalyticsAccount = "UA-21458826-2";
+$wgGoogleAnalyticsAccount = "UA-38534817-1";
  
 # Optional Variables (both default to true)
 $wgGoogleAnalyticsIgnoreSysops = false;
