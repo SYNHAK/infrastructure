@@ -2,7 +2,7 @@
 - hosts: www
   sudo: True
   vars_files:
-    - ../private/spiff-settings.yml
+   - ../private/spiff-settings.yml
   tasks:
     - name: install packages
       action: yum pkg=$item state=latest
@@ -34,6 +34,6 @@
     - name: reload wsgi
       action: command touch /srv/spiff/spiff/wsgi.py
     - name: spiff migrate
-      action: shell source /srv/virtualenv/bin/activate; /srv/spiff/manage.py migrate
+      action: shell source /srv/virtualenv/bin/activate; /srv/spiff/manage.py migrate --merge
     - name: spiff syncdb
       action: shell source /srv/virtualenv/bin/activate; /srv/spiff/manage.py syncdb --all --noinput
