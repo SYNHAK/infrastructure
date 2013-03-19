@@ -17,9 +17,9 @@
       action: template src=../config/phong-settings.py dest=/srv/phong/synhak-documents/tools/settings.py
     - name: meetbot crontab
       action: cron name="Meetbot" user=phong minute=26 hour=8 job="/srv/phong/synhak-documents/tools/meetings.py -w -r -m >/dev/null"
-    - name: financial report wiki cron
-      action: cron name="Daily fiscal wiki page" user=phong minute=0 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -w /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
-    - name: discuss monthly fiscal report
-      action: cron name="monthly fiscal report" user=phong day=1 minute=30 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -e discuss@synhak.org /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
-    - name: treasurer tuesday fiscal report
-      action: cron name="tuesday fiscal report" user=phong minute=0 hour=12 weekday=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -e treasurer@synhak.org /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
+#    - name: financial report wiki cron
+#      action: cron name="Daily fiscal wiki page" user=phong minute=0 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -w /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
+#    - name: discuss monthly fiscal report
+#      action: cron name="monthly fiscal report" user=phong day=1 minute=30 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -e discuss@synhak.org /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
+#    - name: treasurer tuesday fiscal report
+#      action: cron name="tuesday fiscal report" user=phong minute=0 hour=12 weekday=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -e treasurer@synhak.org /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
