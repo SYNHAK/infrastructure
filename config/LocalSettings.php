@@ -191,6 +191,8 @@ require_once( "$IP/extensions/googleAgenda.php" );
 
 include_once( "$IP/extensions/ExternalData/ExternalData.php" );
 
+require_once( "$IP/extensions/SimpleForms.php" );
+
 // Client side caching: We override this in apache.
 // UPDATE: 2012-10-29 set to true for now, custom httpd cache rules are acting up.
 $wgCachePages = true;
