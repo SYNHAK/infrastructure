@@ -22,6 +22,8 @@
       action: yum pkg=texlive-latex state=latest
     - name: setup member list email sync cron
       action: cron name="Member list sync" minute=0 hour=0 job="source /srv/virtualenv/bin/activate; /srv/spiff/manage.py list_members | /usr/lib/mailman/bin/sync_members -f - members"
+    - name: setup daily billing cron
+      action: cron name="Daily billing job" minute=0 hour=1 job="source /srv/virtualenv/bin/activate; /srv/spiff/manage.py bill_members"
     - name: Symlink /logo.png
       action: file dest=/var/www/html/logo.png src=/home/secretary/public_html/docs/images/logo-128.png state=link
     - name: publish documents
