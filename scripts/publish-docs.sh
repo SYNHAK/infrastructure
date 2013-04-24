@@ -10,10 +10,10 @@ cd $tmpdir/synhak-documents/latex/
 make
 rsync -avz *.pdf --delete /home/secretary/public_html/docs/
 cd $tmpdir/synhak-documents/
-mail $(git log --format=%ae -1) <<EOT
-SYNHAK documents have been rebuilt. You may view them at
-http://synhak.org/~secretary/docs/
-EOT
+#mail $(git log --format=%ae -1) <<EOT
+#SYNHAK documents have been rebuilt. You may view them at
+#http://synhak.org/~secretary/docs/
+#EOT
 
 cd $tmpdir/synhak-documents/svg
 
