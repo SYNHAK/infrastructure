@@ -4,19 +4,27 @@
   vars_files:
     - ../private/phong-config.yml
   tasks:
-    - name: install python deps
-      action: easy_install name=$item
-      with_items: 
-        - wikitools
-        - Cheetah
+    - name: install packages
+      action: yum pkg=$item state=latest
+      with_items:
+        - python-virtualenv
+        - python-pip
     - name: create phong user
       action: user name=phong comment="Phong!" state=present home=/srv/phong
     - name: update phong
       action: git repo=https://github.com/SYNHAK/synhak-documents.git dest=/srv/phong/synhak-documents/
+      tags:
+        - quick
     - name: configure phong
       action: template src=../config/phong-settings.py dest=/srv/phong/synhak-documents/tools/settings.py
+    - name: setup phong virtualenv
+      action: command virtualenv /srv/phong-virtualenv/
+    - name: install phong virtualenv
+      action: shell source /srv/phong-virtualenv/bin/activate; pip install -r /srv/phong/synhak-documents/tools/pip-requirements
     - name: meetbot crontab
-      action: cron name="Meetbot" user=phong minute=26 hour=8 job="/srv/phong/synhak-documents/tools/meetings.py -w -r -m >/dev/null"
+      action: cron name="Meetbot" user=phong minute=26 hour=8 job="source /srv/phong-virtualenv/bin/activate; /srv/phong/synhak-documents/tools/meetings.py -w -r -m >/dev/null"
+    - name: event administrivia
+      action: cron name="Events" user=phong minute=12 hour=3 job="source /srv/phong-virtualenv/bin/activate; /srv/phong/synhak-documents/tools/events.py -w -e discuss@synhak.org >/dev/null"
 #    - name: financial report wiki cron
 #      action: cron name="Daily fiscal wiki page" user=phong minute=0 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -w /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
 #    - name: discuss monthly fiscal report
