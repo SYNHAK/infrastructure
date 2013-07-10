@@ -13,6 +13,8 @@
     - name: Configure selinux
       action: seboolean persistent=yes name=httpd_can_network_connect state=true
       ignore_errors: True
+    - name: Create apache directory
+      action: file state=directory path=/srv/web
     - name: Ensure apache is enabled
       action: service name=httpd state=started
     - name: Install SSL certificate
