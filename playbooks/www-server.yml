@@ -3,6 +3,3 @@
 - include: ../plays/apache-setup.yml
 - include: ../plays/mediawiki-update.yml
 - include: ../plays/deploy-spiff.yml
-- include: ../plays/configure-mailman.yml
-- include: ../plays/update-phong.yml
-- include: ../plays/administrative-infrastructure.yml
