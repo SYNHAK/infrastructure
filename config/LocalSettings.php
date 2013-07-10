@@ -191,6 +191,33 @@ require_once( "$IP/extensions/googleAgenda.php" );
 
 include_once( "$IP/extensions/ExternalData/ExternalData.php" );
 
+// s3 uploads
+$wgUploadDirectory = 'wiki-uploads';
+$wgUploadS3Bucket = 'static.synhak.org';
+$wgUploadS3SSL = false;
+$wgPublicS3 = true;
+$wgS3BaseUrl = "http".($wgUploadS3SSL?"s":"")."://s3.amazonaws.com/$wgUploadS3Bucket";
+$wgUploadBaseUrl = "$wgS3BaseUrl/$wgUploadDirectory";
+$wgLocalFileRepo = array(
+  'class' => 'LocalS3Repo',
+  'name' => 's3',
+  'directory' => $wgUploadDirectory,
+  'url' => $wgUploadBaseUrl ? $wgUploadBaseUrl . $wgUploadPath : $wgUploadPath,
+  'urlbase' => $wgS3BaseUrl ? $wgS3BaseUrl : "",
+  'hashLevels' => $wgHashedUploadDirectory ? 2 : 0,
+  'thumbScriptUrl' => $wgThumbnailScriptPath,
+  'transformVia404' => !$wgGenerateThumbnailOnParse,
+  'initialCapital' => $wgCapitalLinks,
+  'deletedDir' => $wgUploadDirectory.'/deleted',
+  'deletedHashLevels' => 3,
+  'AWS_ACCESS_KEY' => "{{aws_key}}",
+  'AWS_SECRET_KEY' => "{{aws_secret}}",
+  'AWS_S3_BUCKET' => $wgUploadS3Bucket,
+  'AWS_S3_PUBLIC' => $wgPublicS3,
+  'AWS_S3_SSL' => $wgUploadS3SSL
+);
+require_once( "$IP/extensions/LocalS3Repo/LocalS3Repo.php" );
+
 // Client side caching: We override this in apache.
 // UPDATE: 2012-10-29 set to true for now, custom httpd cache rules are acting up.
 $wgCachePages = true;

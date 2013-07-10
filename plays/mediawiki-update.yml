@@ -16,8 +16,9 @@
         - php-mysql
         - php-xml
         - librsvg2
+        - ImageMagick
     - name: Update mediawiki
-      action: git repo=https://github.com/SYNHAK/mediawiki.git dest=/srv/web/w/
+      action: git repo=https://github.com/SYNHAK/mediawiki.git dest=${mw_prefix}
     - name: Update ConfirmEdit extension
       action: git repo=${mw_git}/ConfirmEdit.git dest=${mw_prefix}/extensions/ConfirmEdit
     - name: Update ParserFunctions extension
@@ -36,5 +37,7 @@
       action: git repo=${mw_git}/RSS.git dest=${mw_prefix}/extensions/RSS
     - name: Update External Data extension
       action: git repo=${mw_git}/ExternalData.git dest=${mw_prefix}/extensions/ExternalData
+    - name: Update LocalS3Repo extension
+      action: git repo=https://github.com/SYNHAK/LocalS3Repo.git dest=${mw_prefix}/extensions/LocalS3Repo
     - name: Update mediawiki configuration
       action: template src=../config/LocalSettings.php dest=${mw_prefix}/LocalSettings.php
