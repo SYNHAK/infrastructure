@@ -1,7 +1,14 @@
 ---
 - hosts: www
   sudo: true
+  vars_files:
+    - ../config/sysadmins.yml
   tasks:
+    - name: Create sysadmin-git user
+      action: user name=sysadmin-git state=present home=/srv/sysadmin-git/
+    - name: install sysadmin-git keys
+      action: authorized_key user=sysadmin-git key="${item.key}"
+      with_items: $sysadmins
     - name: create secretary user
       action: user name=secretary state=present
     - name: create treasurer user

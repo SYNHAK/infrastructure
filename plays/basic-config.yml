@@ -4,13 +4,8 @@
   vars_files:
     - ../config/sysadmins.yml
   tasks:
-    - name: Create sysadmin-git user
-      action: user name=sysadmin-git state=present home=/srv/sysadmin-git/
     - name: Create sysadmin users
       action: user name=${item.name} state=present groups="wheel" append=true
-      with_items: $sysadmins
-    - name: install sysadmin-git keys
-      action: authorized_key user=sysadmin-git key="${item.key}"
       with_items: $sysadmins
     - name: install sysadmin keys
       action: authorized_key user=${item.name} key="${item.key}"
@@ -24,6 +19,11 @@
       action: lineinfile name=/etc/sysconfig/network regexp=^HOSTNAME= line=HOSTNAME=$inventory_hostname insertafter=EOF state=present
       notify:
       - set hostname
+    - name: Import RPM keys
+      action: command rpm --import $item
+      with_items:
+        - /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+        - https://fedoraproject.org/static/0608B895.txt
     - name: install $item
       action: yum pkg=$item state=latest
       with_items:
