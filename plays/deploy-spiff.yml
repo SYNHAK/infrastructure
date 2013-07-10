@@ -20,10 +20,12 @@
       - spiff migrate
       tags:
         - quick
+    - name: create spiff virtualenv
+      action: command creates=/srv/virtualenv/bin/activate virtualenv /srv/virtualenv/
     - name: build spiff virtualenv
-      action: command pip-python -E /srv/virtualenv/ install -r /srv/spiff/pip-requirements
+      action: shell source /srv/virtualenv/bin/activate; pip install -r /srv/spiff/pip-requirements
     - name: install python-mysql to spiff virtualenv
-      action: command pip-python -E /srv/virtualenv/ install MySQL-python
+      action: shell source /srv/virtualenv/bin/activate; pip install MySQL-python
     - name: configure spiff
       action: template src=../config/local_settings.py dest=/srv/spiff/spiff/local_settings.py
       notify:
@@ -35,5 +37,7 @@
       action: command touch /srv/spiff/spiff/wsgi.py
     - name: spiff migrate
       action: shell source /srv/virtualenv/bin/activate; /srv/spiff/manage.py migrate --merge
+      delegate_to: www-0
     - name: spiff syncdb
       action: shell source /srv/virtualenv/bin/activate; /srv/spiff/manage.py syncdb --all --noinput
+      delegate_to: www-0
