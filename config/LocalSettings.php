@@ -165,21 +165,21 @@ $wgCaptchaQuestions[] = array(
   'answer' => 'Akron');
 // End not-quite-captcha-but-should-help-destroy-spam section
 
-require_once( "$IP/extensions/ConfirmEdit/ReCaptcha.php"); 
-$wgCaptchaClass = 'ReCaptcha';
-$wgReCaptchaPublicKey = '{{wg_captcha_public_key}}';
-$wgReCaptchaPrivateKey = '{{wg_captcha_private_key}}';
-$wgCaptchaTriggers['edit']          = true;
-$wgCaptchaTriggers['create']        = true;
-$wgCaptchaTriggers['addurl']        = true;
-$wgCaptchaTriggers['createaccount'] = true;
-$wgCaptchaTriggers['badlogin']      = true;
-$wgGroupPermissions['*'            ]['skipcaptcha'] = false;
-$wgGroupPermissions['user'         ]['skipcaptcha'] = true;
-$wgGroupPermissions['autoconfirmed']['skipcaptcha'] = true;
-$wgGroupPermissions['bot'          ]['skipcaptcha'] = true; // registered bots
-$wgGroupPermissions['sysop'        ]['skipcaptcha'] = true;
-$wgGroupPermissions['sysop'        ]['coding'] = true;
+// require_once( "$IP/extensions/ConfirmEdit/ReCaptcha.php"); 
+// $wgCaptchaClass = 'ReCaptcha';
+// $wgReCaptchaPublicKey = '{{wg_captcha_public_key}}';
+// $wgReCaptchaPrivateKey = '{{wg_captcha_private_key}}';
+// $wgCaptchaTriggers['edit']          = true;
+// $wgCaptchaTriggers['create']        = true;
+// $wgCaptchaTriggers['addurl']        = true;
+// $wgCaptchaTriggers['createaccount'] = true;
+// $wgCaptchaTriggers['badlogin']      = true;
+// $wgGroupPermissions['*'            ]['skipcaptcha'] = false;
+// $wgGroupPermissions['user'         ]['skipcaptcha'] = true;
+// $wgGroupPermissions['autoconfirmed']['skipcaptcha'] = true;
+// $wgGroupPermissions['bot'          ]['skipcaptcha'] = true; // registered bots
+// $wgGroupPermissions['sysop'        ]['skipcaptcha'] = true;
+// $wgGroupPermissions['sysop'        ]['coding'] = true;
 
 require_once( "$IP/extensions/Secured_HTML.php" );
 
