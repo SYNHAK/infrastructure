@@ -1,3 +1,3 @@
 [submodule "private"]
 	path = private
-	url = sysadmin-git@synhak.org:ansible-private.git
+	url = sysadmin-git@www-0.synhak.org:ansible-private.git
