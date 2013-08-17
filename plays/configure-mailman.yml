@@ -33,7 +33,7 @@
       with_items: $lists
     - name: store list configuration for $item
       action: copy src=../config/mailman/${item.item}.cfg dest=/etc/mailman/${item.item}.cfg
-      with_items: $nm_output
+      with_items: $mm_output
       notify:
         - configure lists
     - name: Ensure service $item is enabled and running
@@ -47,7 +47,7 @@
   handlers:
     - name: configure lists
       action: command echo /usr/lib/mailman/bin/config_list -i /etc/mailman/${item.item}.cfg ${item.item}
-      with_items: $nm_output
+      with_items: $mm_output
     - name: restart postfix
       action: service name=postfix state=reloaded
     - name: run newaliases
