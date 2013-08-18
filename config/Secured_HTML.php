@@ -22,7 +22,7 @@ $wgExtensionCredits['parserhook'][] = array(
 function wfSecuredHTMLExtension() {
     global $wgParser;
     $wgParser->setFunctionHook( "html", "renderSecuredHTML" );
-    wfLoadExtensionMessages('Secured_HTML');
+    //wfLoadExtensionMessages('Secured_HTML');
 }
 function efHtml_Magic( &$magicWords, $langCode ) {
     $magicWords['html'] = array( 0, 'html' );
