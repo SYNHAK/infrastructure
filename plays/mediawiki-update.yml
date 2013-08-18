@@ -2,7 +2,7 @@
 - hosts: www
   sudo: True
   vars:
-    mediawiki_version: "1.19"
+    mediawiki_branch: "synhak-1.21.0"
     mw_git: "https://gerrit.wikimedia.org/r/p/mediawiki/extensions"
     mw_prefix: "/srv/web/w"
   vars_files:
@@ -18,7 +18,9 @@
         - librsvg2
         - ImageMagick
     - name: Update mediawiki
-      action: git repo=https://github.com/SYNHAK/mediawiki.git dest=${mw_prefix}
+      action: git repo=https://github.com/SYNHAK/mediawiki.git dest=${mw_prefix} version=${mediawiki_branch}
+      notify: 
+        - Run update.php
     - name: Update ConfirmEdit extension
       action: git repo=${mw_git}/ConfirmEdit.git dest=${mw_prefix}/extensions/ConfirmEdit
     - name: Update ParserFunctions extension
@@ -37,7 +39,14 @@
       action: git repo=${mw_git}/RSS.git dest=${mw_prefix}/extensions/RSS
     - name: Update External Data extension
       action: git repo=${mw_git}/ExternalData.git dest=${mw_prefix}/extensions/ExternalData
-    - name: Update LocalS3Repo extension
-      action: git repo=https://github.com/SYNHAK/LocalS3Repo.git dest=${mw_prefix}/extensions/LocalS3Repo
+    - name: Update AWS extension
+      action: git repo=${mw_git}/AWS.git  dest=${mw_prefix}/extensions/AWS
+    - name: Install composer crap
+      action: shell chdir=${mw_prefix}/extensions/AWS creates=${mw_prefix}/composer.phar curl -sS https://getcomposer.org/installer | php
+    - name: Install composer crap crap
+      action: command chdir=${mw_prefix}/extensions/AWS php composer.phar install
     - name: Update mediawiki configuration
       action: template src=../config/LocalSettings.php dest=${mw_prefix}/LocalSettings.php
+  handlers:
+    - name: Run update.php
+      action: command chdir=${mw_prefix}/maintenance/ php update.php
