@@ -24,6 +24,7 @@
       with_items:
         - /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
         - https://fedoraproject.org/static/0608B895.txt
+      ignore_errors: true
     - name: install $item
       action: yum pkg=$item state=latest
       with_items:
