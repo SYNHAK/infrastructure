@@ -25,7 +25,11 @@
       action: copy src=../private/synhak.org.key dest=/etc/pki/tls/private/synhak.org.key
       notify:
         - reload apache
-    - name: Update apache configuration
+    - name: Update general apache configuration
+      action: template src=../config/apache.conf dest=http/conf/httpd.conf
+      notify:
+        - reload apache
+    - name: Update synhak.org apache configuration
       action: copy src=../config/synhak.org.conf dest=/etc/httpd/conf.d/synhak.org.conf
       notify:
         - reload apache
