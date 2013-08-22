@@ -26,7 +26,7 @@
       notify:
         - reload apache
     - name: Update general apache configuration
-      action: template src=../config/apache.conf dest=http/conf/httpd.conf
+      action: template src=../config/apache.conf dest=/etc/httpd/conf/httpd.conf
       notify:
         - reload apache
     - name: Update synhak.org apache configuration
