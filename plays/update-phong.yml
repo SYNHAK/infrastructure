@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: admin
   sudo: true
   vars_files:
     - ../private/phong-config.yml
@@ -9,6 +9,8 @@
       with_items:
         - python-virtualenv
         - python-pip
+    - name: Install phong helper script
+      action: copy src=../scripts/run-phong.sh dest=/srv/phong/run-phong.sh
     - name: create phong user
       action: user name=phong comment="Phong!" state=present home=/srv/phong
     - name: update phong
