@@ -17,6 +17,11 @@
       with_items:
         - mailman
         - postfix
+        - nginx
+    - name: configure nginx
+      action: copy src=../config/lists.synhak.org.conf dest=/etc/nginx/conf.d/lists.synhak.org.conf
+      notify:
+        - restart nginx
     - name: install basic aliases
       action: copy src=../config/aliases dest=/etc/synhak-aliases
       notify:
@@ -27,13 +32,8 @@
         - restart postfix
     - name: Configure mailman
       action: copy src=../config/mm_cfg.py dest=/usr/lib/mailman/Mailman/mm_cfg.py
-    - name: create lists
-      action: command creates=/var/lib/mailman/lists/${item}/config.pck /usr/lib/mailman/bin/newlist -q ${item} sysadmin@synhak.org ${admin_pw}
-      register: mm_output
-      with_items: $lists
-    - name: store list configuration for $item
-      action: copy src=../config/mailman/${item.item}.cfg dest=/etc/mailman/${item.item}.cfg
-      with_items: $mm_output
+    - name: configure thttpd
+      action: copy src=../config/mailman-thttpd.conf dest=/etc/thttpd.conf
       notify:
         - configure lists
     - name: Ensure service $item is enabled and running
@@ -52,3 +52,7 @@
       action: service name=postfix state=reloaded
     - name: run newaliases
       action: command newaliases
+    - name: restart nginx
+      action: service name=nginx state=reloaded
+    - name: restart thttpd
+      action: service name=thttpd state=reloaded
