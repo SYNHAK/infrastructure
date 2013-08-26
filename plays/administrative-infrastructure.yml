@@ -1,5 +1,5 @@
 ---
-- hosts: www
+- hosts: admin
   sudo: true
   vars_files:
     - ../config/sysadmins.yml
