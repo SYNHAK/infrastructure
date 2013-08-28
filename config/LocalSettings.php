@@ -30,6 +30,8 @@ $wgArticlePath      = "/wiki/$1";
 $wgScript           = "$wgScriptPath/index.php";
 $wgRedirectScript   = "$wgScriptPath/redirect.php";
 $wgUsePathInfo      = true;
+$wgServer           = "https://synhak.org";
+$wgCanonicalServer  = "https://synhak.org";
 
 ## The relative URL path to the skins directory
 $wgStylePath        = "$wgScriptPath/skins";
