@@ -3,3 +3,5 @@ sysadmins:
     key: "$FILE(../sysadmin-keys/tdfischer.pub)"
   - name: phuzion
     key: "$FILE(../sysadmin-keys/phuzion.pub)"
+  - name: gsvolt
+    key: "$FILE(../sysadmin-keys/gsvolt.pub)"
