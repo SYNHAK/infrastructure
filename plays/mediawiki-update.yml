@@ -39,12 +39,8 @@
       action: git repo=${mw_git}/RSS.git dest=${mw_prefix}/extensions/RSS
     - name: Update External Data extension
       action: git repo=${mw_git}/ExternalData.git dest=${mw_prefix}/extensions/ExternalData
-    - name: Update AWS extension
-      action: git repo=${mw_git}/AWS.git  dest=${mw_prefix}/extensions/AWS
-    - name: Install composer crap
-      action: shell chdir=${mw_prefix}/extensions/AWS creates=${mw_prefix}/composer.phar curl -sS https://getcomposer.org/installer | php
-    - name: Install composer crap crap
-      action: command chdir=${mw_prefix}/extensions/AWS php composer.phar install
+    - name: Update LocalS3Repo extension
+      action: git repo=https://github.com/SYNHAK/LocalS3Repo.git  dest=${mw_prefix}/extensions/LocalS3Repo
     - name: Update mediawiki configuration
       action: template src=../config/LocalSettings.php dest=${mw_prefix}/LocalSettings.php
   handlers:
