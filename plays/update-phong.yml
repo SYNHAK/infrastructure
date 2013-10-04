@@ -14,11 +14,13 @@
     - name: Install phong helper script
       action: copy src=../scripts/run-phong.sh dest=/srv/phong/run-phong.sh
     - name: update phong
-      action: git repo=https://github.com/SYNHAK/synhak-documents.git dest=/srv/phong/synhak-documents/
+      action: git repo=https://github.com/SYNHAK/phong.git dest=/srv/phong/phong
       tags:
-        - quick
+        - git
+    - name: Create phong data directory
+      action: file path=/srv/phong/.local/share/Phong/ state=directory
     - name: configure phong
-      action: template src=../config/phong-settings.py dest=/srv/phong/synhak-documents/tools/settings.py
+      action: template src=../config/phong.cfg dest=/srv/phong/.local/share/Phong/config owner=phong group=phong
     - name: setup phong virtualenv
       action: command virtualenv /srv/phong-virtualenv/
     - name: install phong virtualenv
