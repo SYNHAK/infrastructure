@@ -43,6 +43,8 @@
       action: git repo=https://github.com/SYNHAK/LocalS3Repo.git  dest=${mw_prefix}/extensions/LocalS3Repo
     - name: Update mediawiki configuration
       action: template src=../config/LocalSettings.php dest=${mw_prefix}/LocalSettings.php
+      tags:
+        - reconfigure
   handlers:
     - name: Run update.php
       action: command chdir=${mw_prefix}/maintenance/ php update.php
