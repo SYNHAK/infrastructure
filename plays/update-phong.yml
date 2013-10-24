@@ -43,11 +43,11 @@
     - name: install phong virtualenv
       action: command /srv/phong/run-in-phong-virtualenv.sh pip install -r /srv/phong/phong/pip-requirements
     - name: meetbot crontab
-      action: cron name="Meetbot" user=phong minute=26 hour=8 job="/srv/phong/run-phong.sh /srv/phong/phong/phong.py meetings -w -r -m >/dev/null"
+      action: cron name="Meetbot" user=phong minute=26 hour=8 job="/srv/phong/run-phong.sh meetings -w -r -m >/dev/null"
     - name: event mails
-      action: cron name="Events" user=phong minute=12 hour=3 job="/srv/phong/run-phong.sh  /srv/phong/phong/phong.py new-event-mails >/dev/null"
+      action: cron name="Events" user=phong minute=12 hour=3 job="/srv/phong/run-phong.sh new-event-mails >/dev/null"
     - name: event wiki page
-      action: cron name="Events/Wiki" user=phong minute=12 hour=3 job="/srv/phong/run-phong.sh /srv/phong/phong/phong.py update-events-wikipage >/dev/null"
+      action: cron name="Events/Wiki" user=phong minute=12 hour=3 job="/srv/phong/run-phong.sh update-events-wikipage >/dev/null"
     - name: configure document publish s3cmd
       action: template src=../config/synhak-aws-document-uploads.cfg dest=/etc/synhak-aws-document-uploads.cfg owner=phong group=phong
     - name: install phong.php
