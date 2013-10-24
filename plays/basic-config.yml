@@ -4,6 +4,12 @@
   vars_files:
     - ../config/sysadmins.yml
   tasks:
+    - name: Install packages
+      action: yum pkg=$item state=latest
+      with_items:
+        - libselinux-python
+      tags:
+        - packages
     - name: Create sysadmin users
       action: user name=${item.name} state=present groups="wheel" append=true
       with_items: $sysadmins
