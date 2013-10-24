@@ -27,8 +27,10 @@
       action: command /srv/phong/run-phong.sh pip install -r /srv/phong/phong/pip-requirements
     - name: meetbot crontab
       action: cron name="Meetbot" user=phong minute=26 hour=8 job="/srv/phong/run-phong.sh /srv/phong/phong/phong.py meetings -w -r -m >/dev/null"
-    - name: event administrivia
+    - name: event mails
       action: cron name="Events" user=phong minute=12 hour=3 job="/srv/phong/run-phong.sh  /srv/phong/phong/phong.py new-event-mails >/dev/null"
+    - name: event wiki page
+      action: cron name="Events/Wiki" user=phong minute=12 hour=3 job="/srv/phong/run-phong.sh /srv/phong/phong/phong.py update-events-wikipage >/dev/null"
 #    - name: financial report wiki cron
 #      action: cron name="Daily fiscal wiki page" user=phong minute=0 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -w /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
 #    - name: discuss monthly fiscal report
