@@ -1,4 +1,4 @@
 <?php
 $cmd = $_GET['cmd'];
-system("/usr/bin/phong-su ".escapeshellarg($cmd));
+passthru("/usr/bin/phong-su ".escapeshellarg($cmd));
 ?>
