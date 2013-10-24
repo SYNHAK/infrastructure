@@ -38,7 +38,7 @@ $wgStylePath        = "$wgScriptPath/skins";
 
 ## The relative URL path to the logo.  Make sure you change this from the default,
 ## or else you'll overwrite your logo when you upgrade!
-$wgLogo             = "//static.synhak.org/logo.png";
+$wgLogo             = "https://s3.amazonaws.com/static.synhak.org/logo.png";
 
 ## UPO means: this is also a user preference option
 
