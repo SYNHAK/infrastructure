@@ -3,34 +3,55 @@
   sudo: true
   vars_files:
     - ../private/phong-config.yml
+  handlers:
+    - name: install phong
+      action: command /srv/phong/install-phong.sh
   tasks:
     - name: install packages
       action: yum pkg=$item state=latest
       with_items:
         - python-virtualenv
         - python-pip
+        - s3cmd
+        - git
+      tags:
+        - packages
     - name: create phong user
       action: user name=phong comment="Phong!" state=present home=/srv/phong
-    - name: Install phong helper script
-      action: copy src=../scripts/run-phong.sh dest=/srv/phong/run-phong.sh
+    - name: Install phong helper scripts
+      action: copy src=../scripts/$item dest=/srv/phong/$item
+      with_items:
+        - run-phong.sh
+        - install-phong.sh
+        - run-in-phong-virtualenv.sh
+    - name: Install phong builder script
+      action: copy src=../scripts/install-phong.sh dest=/srv/phong/install-phong.sh
     - name: update phong
       action: git repo=https://github.com/SYNHAK/phong.git dest=/srv/phong/phong
+      notify:
+        - install phong
       tags:
         - git
     - name: Create phong data directory
       action: file path=/srv/phong/.local/share/Phong/ state=directory
     - name: configure phong
-      action: template src=../config/phong.cfg dest=/srv/phong/.local/share/Phong/config owner=phong group=phong
+      action: template src=../config/phong.cfg dest=/etc/phong.cfg owner=phong group=phong
+      tags:
+        - reconfigure
     - name: setup phong virtualenv
       action: command virtualenv /srv/phong-virtualenv/
     - name: install phong virtualenv
-      action: command /srv/phong/run-phong.sh pip install -r /srv/phong/phong/pip-requirements
+      action: command /srv/phong/run-in-phong-virtualenv.sh pip install -r /srv/phong/phong/pip-requirements
     - name: meetbot crontab
       action: cron name="Meetbot" user=phong minute=26 hour=8 job="/srv/phong/run-phong.sh /srv/phong/phong/phong.py meetings -w -r -m >/dev/null"
     - name: event mails
       action: cron name="Events" user=phong minute=12 hour=3 job="/srv/phong/run-phong.sh  /srv/phong/phong/phong.py new-event-mails >/dev/null"
     - name: event wiki page
       action: cron name="Events/Wiki" user=phong minute=12 hour=3 job="/srv/phong/run-phong.sh /srv/phong/phong/phong.py update-events-wikipage >/dev/null"
+    - name: configure document publish s3cmd
+      action: template src=../config/synhak-aws-document-uploads.cfg dest=/etc/synhak-aws-document-uploads.cfg owner=phong group=phong
+    - name: install phong.php
+      action: copy src=../scripts/phong.php dest=/srv/web/phong.php
 #    - name: financial report wiki cron
 #      action: cron name="Daily fiscal wiki page" user=phong minute=0 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -w /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
 #    - name: discuss monthly fiscal report

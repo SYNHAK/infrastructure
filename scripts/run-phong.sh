@@ -1,3 +1,2 @@
-source /srv/phong-virtualenv/bin/activate
-cd /srv/phong/phong/
-exec $@
+#!/bin/sh
+exec /srv/phong/run-in-phong-virtualenv.sh /srv/phong/phong/phong.py $@
