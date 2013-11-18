@@ -14,6 +14,7 @@
         - python-pip
         - s3cmd
         - git
+        - python-twitter
       tags:
         - packages
     - name: create phong user
@@ -52,6 +53,8 @@
       action: template src=../config/synhak-aws-document-uploads.cfg dest=/etc/synhak-aws-document-uploads.cfg owner=phong group=phong
     - name: install phong.php
       action: copy src=../scripts/phong.php dest=/srv/web/phong.php
+    - name: install space-door.php
+      action: copy src=../scripts/space-door.php dest=/srv/web/space-door.php
 #    - name: financial report wiki cron
 #      action: cron name="Daily fiscal wiki page" user=phong minute=0 hour=2 job="/srv/phong/synhak-documents/tools/fiscal-summary.py -w /home/treasurer/public_html/synhak.xml.gnucash >/dev/null"
 #    - name: discuss monthly fiscal report
