@@ -47,6 +47,8 @@
       action: copy src=../scripts/backup-mailman.sh dest=/usr/local/bin/backup-mailman.sh owner=root group=root mode=0755
     - name: Setup mailman backup cron
       action: cron name="Mailman Backup" user=root minute=26 hour=4 job="/usr/local/bin/backup-mailman.sh >/dev/null"
+    - name: Unalias noc from /etc/aliases
+      action: lineinfile dest=/etc/aliases regexp="noc:(.*)" line="#noc:\1"
   handlers:
     - name: restart postfix
       action: service name=postfix state=reloaded
