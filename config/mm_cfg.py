@@ -6,6 +6,7 @@ MAILMAN_GID = grp.getgrnam('mailman')[2]
 DEFAULT_URL_PATTERN = 'https://%s/mailman/'
 DEFAULT_URL_HOST = 'synhak.org'
 DEFAULT_EMAIL_HOST = 'synhak.org'
+DEFAULT_URL = 'https://synhak.org/mailman/'
 add_virtualhost(DEFAULT_URL_HOST, DEFAULT_EMAIL_HOST)
 PUBLIC_ARCHIVE_URL = 'https://synhak.org/pipermail/%(listname)s'
 VIRTUAL_HOST_OVERVIEW = False
