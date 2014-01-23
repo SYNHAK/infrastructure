@@ -47,8 +47,8 @@ Roles
 
 There are currently three roles, and three servers.
 
-wwww
-----
+www
+---
 
 Basic webservers. They are configured to run apache and serve over HTTP and
 HTTPS:
