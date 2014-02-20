@@ -1,0 +1,113 @@
+---
+- hosts: www
+  sudo: true
+  gather_facts: false
+  vars:
+    mediawiki_branch: "synhak-1.22.0"
+    mw_git: "https://gerrit.wikimedia.org/r/p/mediawiki/extensions"
+  vars_files:
+    - private/spiff-settings.yml
+    - private/mediawiki-settings.yml
+  roles:
+    - role: managed-host
+      sysadmins:
+        - name: tdfischer
+          key: "{{ lookup('file', 'sysadmin-keys/tdfischer.pub') }}"
+        - name: phuzion
+          key: "{{ lookup('file', 'sysadmin-keys/phuzion.pub') }}"
+        - name: gsvolt
+          key: "{{ lookup('file', 'sysadmin-keys/gsvolt.pub') }}"
+      extra_packages:
+        - php-pecl-apc
+        - php-xml
+        - php-mysql
+        - mysql-devel
+        - mysql
+        - librsvg2
+        - ImageMagick
+
+    - role: django-app
+      name: spiff
+      git: git://github.com/SYNHAK/spiff.git
+      uwsgi_mount: auth
+      uwsgi_config:
+        src: templates/spiff-settings.py
+        dest: "{{uwsgi_app_path}}/local_settings.py"
+      uwsgi_extra_packages:
+        - MySQL-python
+      nginx_config: "add_header Access-Control-Allow-Credentials true;add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept';"
+
+    - role: uwsgi-app
+      name: mediawiki
+      git: git://github.com/SYNHAK/mediawiki.git
+      tag: "{{mediawiki_branch}}"
+      plugin: php
+      uwsgi_mount: wiki
+      uwsgi_nginx_config: templates/mediawiki-nginx.conf
+      uwsgi_buffer_size: 8192
+      uwsgi_config:
+        src: templates/LocalSettings.php
+        dest: "{{uwsgi_app_path}}/LocalSettings.php"
+
+    - role: mediawiki-extension
+      name: ConfirmEdit
+      git: "{{mw_git}}/ConfirmEdit.git"
+      uwsgi_name: mediawiki
+
+    - role: mediawiki-extension
+      name: ParserFunctions
+      git: "{{mw_git}}/ParserFunctions.git"
+      uwsgi_name: mediawiki
+
+    - role: mediawiki-extension
+      name: Nuke
+      git: "{{mw_git}}/Nuke.git"
+      uwsgi_name: mediawiki
+
+    - role: mediawiki-extension
+      name: Gadgets
+      git: "{{mw_git}}/Gadgets.git"
+      uwsgi_name: mediawiki
+
+    - role: mediawiki-extension
+      name: googleAnalytics
+      git: "{{mw_git}}/googleAnalytics.git"
+      uwsgi_name: mediawiki
+
+    - role: mediawiki-extension
+      name: secured_html
+      srcFile: "scripts/Secured_HTML.php"
+      uwsgi_name: mediawiki
+
+    - role: mediawiki-extension
+      name: RSS
+      git: "{{mw_git}}/RSS.git"
+      uwsgi_name: mediawiki
+
+    - role: mediawiki-extension
+      name: Nuke
+      git: "{{mw_git}}/Nuke.git"
+      uwsgi_name: mediawiki
+
+    - role: mediawiki-extension
+      name: ExternalData
+      git: "{{mw_git}}/ExternalData.git"
+      uwsgi_name: mediawiki
+
+    - role: mediawiki-extension
+      name: googleAgenda
+      srcFile: "scripts/googleAgenda.php"
+      destFile: "googleAgenda.php"
+      uwsgi_name: mediawiki
+
+    - role: mediawiki-extension
+      name: LocalS3Repo
+      git: "https://github.com/SYNHAK/LocalS3Repo.git"
+      uwsgi_name: mediawiki
+
+    - role: uwsgi-server
+
+    - role: nginx-uwsgi
+      name: synhak.org
+      nginx_append:
+        - templates/synhak-nginx.conf

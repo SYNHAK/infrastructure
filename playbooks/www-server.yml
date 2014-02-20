@@ -1,5 +1,0 @@
----
-- include: ../plays/basic-config.yml
-- include: ../plays/nginx-setup.yml
-- include: ../plays/mediawiki-update.yml
-- include: ../plays/deploy-spiff.yml
