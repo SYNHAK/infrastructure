@@ -37,6 +37,8 @@
       uwsgi_extra_packages:
         - MySQL-python
       nginx_config: "add_header Access-Control-Allow-Credentials true;add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept';"
+      uwsgi_logger: "syslog:spiff"
+      nginx_log: "/dev/null"
 
     - role: uwsgi-app
       name: mediawiki
@@ -49,6 +51,8 @@
       uwsgi_config:
         src: templates/LocalSettings.php
         dest: "{{uwsgi_app_path}}/LocalSettings.php"
+      uwsgi_logger: "syslog:mediawiki"
+      nginx_log: "/dev/null"
 
     - role: mediawiki-extension
       name: ConfirmEdit
