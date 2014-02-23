@@ -263,7 +263,7 @@ $wgNamespacesWithSubpages = array_fill(0, 200, true);
 
 //$wgReadOnly = 'OUTAGE: This wiki is in read-only mode until 5PM EST on August 28th.';
 
-$wgDebugLogFile = "/tmp/mediawiki-debug.log";
+//$wgDebugLogFile = "/tmp/mediawiki-debug.log";
 
 $wgSessionsInObjectCache = true;
 $wgMainCacheType = CACHE_DB;
