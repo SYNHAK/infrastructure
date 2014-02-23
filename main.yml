@@ -29,6 +29,7 @@
     - role: django-app
       name: spiff
       git: git://github.com/SYNHAK/spiff.git
+      vcs_version: master
       uwsgi_mount: auth
       uwsgi_config:
         src: templates/spiff-settings.py
@@ -40,7 +41,7 @@
     - role: uwsgi-app
       name: mediawiki
       git: git://github.com/SYNHAK/mediawiki.git
-      tag: "{{mediawiki_branch}}"
+      vcs_version: synhak-1.22.0
       plugin: php
       uwsgi_mount: wiki
       uwsgi_nginx_config: templates/mediawiki-nginx.conf
