@@ -109,7 +109,7 @@
 
     - role: mediawiki-extension
       name: googleAnalytics
-      git: "{{mw_git}}/googleAnalytics.git"
+      git: "git://github.com/SYNHAK/googleAnalytics.git"
       uwsgi_name: mediawiki
 
     - role: mediawiki-extension
