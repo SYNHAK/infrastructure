@@ -1,0 +1,132 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  vars:
+    region: us-east-1
+  tasks:
+    - name: Install root synhak ssh key
+      action:
+        module: ec2_key
+        name: root
+        region: $region
+        state: present
+        key_material: "{{lookup('file', 'sysadmin-keys/root.pub')}}"
+    - name: Configure VPC
+      register: vpc
+      action:
+        module: ec2_vpc
+        cidr_block: 10.0.0.0/16
+        subnets:
+          - cidr: 10.0.0.0/24
+            az: us-east-1a
+        route_tables:
+          - subnets:
+              - 10.0.0.0/24
+            routes:
+              - dest: 10.0.0.0/0
+                gw: igw
+        dns_hostnames: yes
+        dns_support: yes
+        internet_gateway: yes
+        state: present
+        wait: yes
+        region: $region
+    - name: Configure public-web group
+      register: public_web_group
+      action:
+        module: ec2_group
+        name: public-web
+        description: Public web-facing server
+        vpc_id: "{{vpc.vpc_id}}"
+        region: $region
+        rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 443
+            to_port: 443
+            cidr_ip: 0.0.0.0/0
+    - name: Configure nginx-edge VPC group
+      action: 
+        module: ec2_group
+        name: nginx-edge
+        description: nginx edge servers
+        vpc_id: "{{vpc.vpc_id}}"
+        region:  $region
+        rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            to_port: 22
+            from_port: 22
+            cidr_ip: 0.0.0.0/0
+    - name: Configure log-server VPC group
+      action:
+        module: ec2_group
+        name: log-server
+        description: Logging capture and analysis server
+        vpc_id: "{{vpc.vpc_id}}"
+        region: $region
+        rules:
+          - proto: udp
+            to_port: 557
+            from_port: 557
+            cidr_ip: 10.0.0.0/8
+    - name: Create ELB
+      register: elb
+      local_action:
+        module: ec2_elb_lb
+        state: present
+        name: www-vpc
+        region: $region
+        subnets:
+          - "{{vpc.subnets[0].id}}"
+        group:
+          - "{{public_web_group.group_id}}"
+        listeners:
+          - protocol: http
+            load_balancer_port: 80
+            instance_port: 80
+            instance_protocol: http
+          - protocol: https
+            load_balancer_port: 443
+            instance_port: 80
+            instance_protocol: http
+            ssl_certificate_id: arn:aws:iam::227340562114:server-certificate/startssl-with-ca-synhak.org
+    - name: Setup DNS
+      local_action:
+        module: route53
+        command: create
+        zone: synhak.org
+        record: dev.synhak.org
+        type: CNAME
+        value: "{{elb.elb.dns_name}}"
+        overwrite: true
+    - name: Launch www instances
+      register: ec2
+      local_action:
+        module: ec2
+        assign_public_ip: true
+        vpc_subnet_id: "{{vpc.subnets[0].id}}"
+        count_tag:
+          role: www
+        exact_count: 2
+        group:
+          - nginx-edge
+        instance_tags:
+          role: www
+        region: $region
+        image: ami-1337187a
+        keypair: root
+        instance_type: t1.micro
+        wait: yes
+    - wait_for: port=22 host={{item.public_ip}}
+      with_items: ec2.tagged_instances
+    - name: Add instances to host group
+      local_action: add_host hostname={{item.public_ip}} groupname=tag_role_www
+      with_items: ec2.tagged_instances
+- include: main.yml

@@ -1,13 +1,45 @@
 ---
-- hosts: www
+- hosts: static-www
+  tasks:
+    - add_host: hostname={{inventory_hostname}} groupname=tag_role_www
+- hosts: tag_role_www
   sudo: true
   gather_facts: false
+  user: fedora
   vars:
     mediawiki_branch: "synhak-1.22.0"
     mw_git: "https://gerrit.wikimedia.org/r/p/mediawiki/extensions"
   vars_files:
     - private/spiff-settings.yml
     - private/mediawiki-settings.yml
+  pre_tasks:
+    - name: Collect EC2 facts
+      action: ec2_facts
+    - name: Remove from ELB
+      connection: local
+      sudo: false
+      local_action:
+        module: ec2_elb
+        region: "{{ansible_ec2_placement_region}}"
+        ec2_elbs:
+          - www-vpc
+        state: 'absent'
+        instance_id: "{{ansible_ec2_instance_id}}"
+    - name: Install libselinux-python
+      action: yum pkg=libselinux-python state=present
+    - name: Configure selinux
+      action: selinux state=permissive policy=targeted
+  post_tasks:
+    - name: Add to ELB
+      connection: local
+      sudo: false
+      local_action:
+        module: ec2_elb
+        region: "{{ansible_ec2_placement_region}}"
+        ec2_elbs:
+          - www-vpc
+        instance_id: "{{ansible_ec2_instance_id}}"
+        state: 'present'
   roles:
     - role: managed-host
       sysadmins:
@@ -105,10 +137,10 @@
       destFile: "googleAgenda.php"
       uwsgi_name: mediawiki
 
-    - role: mediawiki-extension
-      name: LocalS3Repo
-      git: "https://github.com/SYNHAK/LocalS3Repo.git"
-      uwsgi_name: mediawiki
+    #- role: mediawiki-extension
+    #  name: LocalS3Repo
+    #  git: "https://github.com/SYNHAK/LocalS3Repo.git"
+    #  uwsgi_name: mediawiki
 
     - role: uwsgi-server
 
