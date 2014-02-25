@@ -4,6 +4,7 @@
     - add_host: hostname={{inventory_hostname}} groupname=tag_role_www
 - hosts: tag_role_www
   sudo: true
+  serial: 1
   gather_facts: false
   user: fedora
   vars:
