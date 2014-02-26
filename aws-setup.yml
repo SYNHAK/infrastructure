@@ -103,8 +103,9 @@
         command: create
         zone: synhak.org
         record: dev.synhak.org
-        type: CNAME
-        value: "{{elb.elb.dns_name}}"
+        type: A
+        alias_id: "{{elb.elb.hosted_zone_id}}"
+        alias_dns: "{{elb.elb.hosted_zone_name}}"
         overwrite: true
     - name: Launch www instances
       register: ec2
