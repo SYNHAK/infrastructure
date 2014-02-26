@@ -138,10 +138,10 @@
       destFile: "googleAgenda.php"
       uwsgi_name: mediawiki
 
-    #- role: mediawiki-extension
-    #  name: LocalS3Repo
-    #  git: "https://github.com/SYNHAK/LocalS3Repo.git"
-    #  uwsgi_name: mediawiki
+    - role: mediawiki-extension
+      name: LocalS3Repo
+      git: "https://github.com/SYNHAK/LocalS3Repo.git"
+      uwsgi_name: mediawiki
 
     - role: uwsgi-server
 
