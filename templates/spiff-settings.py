@@ -21,6 +21,11 @@ CORS_ALLOW_CREDENTIALS = True
 ALLOWED_HOSTS = ['synhak.org']
 SECRET_KEY = '{{spiff_secret}}'
 
+DEBUG = True
+
+WEBUI_URL = "http://static.synhak.org/auth-ui/"
+DEFAULT_FROM_EMAIL = "spiff@synhak.org"
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -78,5 +83,3 @@ LOGGING = {
     }
   },
 }
-
-DEBUG = True
